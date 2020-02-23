@@ -1,2 +1,8 @@
 # MBM
-MBM (Minecraft Base Mod) is a Java module built on top of Forge that will make designing and maintaining Minecraft mods easier.
+MBM (Minecraft Base Mod) is a collection of Java utility classes for creating mods.
+
+## Motivation
+I have 2 goals in mind for this:
+
+- Heavily reduce maintenance time by reducing repetition.
+- Simplify tasks to make developing mods easier.
