@@ -10,7 +10,7 @@ public class BaseMod {
 	/**
 	 * The main logger.
 	 */
-	private static final Logger LOGGER = LogManager.getLogger();
+	protected static final Logger LOGGER = LogManager.getLogger();
 	
 	public BaseMod() {
 		// todo: Register methods for registering things!
