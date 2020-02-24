@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraftforge.common.MinecraftForge;
 
-@SuppressWarnings("unused")
 public class BaseMod {
 	/**
 	 * The main logger.

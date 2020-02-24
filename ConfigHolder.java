@@ -7,7 +7,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /**
  * A class that collects and manages configurations.
- * @author Colton
  *
  * @param <A> The client configuration.
  * @param <B> The server configuration.
