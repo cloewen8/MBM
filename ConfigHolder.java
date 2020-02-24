@@ -42,9 +42,9 @@ public class ConfigHolder<A extends IConfig, B extends IConfig> {
 		
 		FMLJavaModLoadingContext.get().getModEventBus().addListener((ModConfig.ModConfigEvent event) -> {
 			ModConfig config = event.getConfig();
-			if (config.getSpec() == CONFIG_CLIENT)
+			if (config.getSpec() == CONFIG_SPEC_CLIENT)
 				CONFIG_CLIENT.bake(config);
-			else if (config.getSpec() == CONFIG_SERVER)
+			else if (config.getSpec() == CONFIG_SPEC_SERVER)
 				CONFIG_SERVER.bake(config);
 		});
 		return this;
