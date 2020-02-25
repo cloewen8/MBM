@@ -17,6 +17,11 @@ public class ConfigHolder<A extends IConfig, B extends IConfig> {
 	public final A CONFIG_CLIENT;
 	public final B CONFIG_SERVER;
 	
+	/**
+	 * Builds the configurations.
+	 * @param clientConfig For the client.
+	 * @param serverConfig For the server.
+	 */
 	public ConfigHolder(A clientConfig, B serverConfig) {
 		ForgeConfigSpec.Builder clientSpecBuilder = new ForgeConfigSpec.Builder();
 		ForgeConfigSpec.Builder serverSpecBuilder = new ForgeConfigSpec.Builder();
@@ -32,10 +37,9 @@ public class ConfigHolder<A extends IConfig, B extends IConfig> {
 	
 	/**
 	 * Registers the configurations.
-	 * @param mod The mod to register for.
 	 * @return The ConfigHolder, used for chaining.
 	 */
-	public ConfigHolder<A, B> register(BaseMod mod) {
+	public ConfigHolder<A, B> register() {
 		ModLoadingContext modLoadingContext = ModLoadingContext.get();
 		modLoadingContext.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.CLIENT, CONFIG_SPEC_CLIENT);
 		modLoadingContext.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.SERVER, CONFIG_SPEC_SERVER);

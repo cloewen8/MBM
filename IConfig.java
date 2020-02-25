@@ -5,6 +5,9 @@ import javax.annotation.Nonnull;
 import net.minecraftforge.common.ForgeConfigSpec.Builder;
 import net.minecraftforge.fml.config.ModConfig;
 
+/**
+ * A configuration used with the ConfigHolder.
+ */
 public interface IConfig {
 	/**
 	 * Builds the configuration.

@@ -10,6 +10,12 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+/**
+ * A simplified deferred registry that instantiates classes and reports exceptions as crashes
+ * automatically.
+ *
+ * @param <T> The base registry type.
+ */
 public abstract class BaseRegistry<T extends IForgeRegistryEntry<T>> extends DeferredRegister<T> {
 	private IForgeRegistry<T> type;
 	private String modid;
@@ -48,9 +54,9 @@ public abstract class BaseRegistry<T extends IForgeRegistryEntry<T>> extends Def
 	}
 	
 	/**
-	 * Gracefully crashes when an object fails to be registered.
+	 * Gracefully crashes when an entry fails to be registered.
 	 * @param message The reason it failed to be registered.
-	 * @param name The name of the object.
+	 * @param name The name of the entry.
 	 * @param cause The cause of the failure.
 	 * @return
 	 */
