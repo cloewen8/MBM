@@ -1,5 +1,6 @@
 package ca.cjloewen.base;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
@@ -60,11 +61,11 @@ public abstract class BaseRegistry<T extends IForgeRegistryEntry<T>> extends Def
 	 * @param cause The cause of the failure.
 	 * @return
 	 */
-	private Object reportRegistryFailure(String message, String name, Throwable cause) {
+	private void reportRegistryFailure(String message, String name, Throwable cause) {
 		CrashReport crashReport = CrashReport.makeCrashReport(cause,
 			String.format("Unable to register %s!", type.getRegistryName().toString()));
 		CrashReportCategory crashCategory = crashReport.makeCategory("Object being registered");
 		crashCategory.addDetail("Resource location", () -> new ResourceLocation(modid, name).toString());
-		throw new ReportedException(crashReport);
+		Minecraft.displayCrashReport(crashReport);
 	}
 }
