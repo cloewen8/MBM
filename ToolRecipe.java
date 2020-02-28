@@ -23,6 +23,9 @@ import net.minecraftforge.common.ForgeHooks;
  * Instead causing the tool to take damage.
  */
 public class ToolRecipe extends ShapelessRecipe {
+	static int MAX_WIDTH = 3;
+	static int MAX_HEIGHT = 3;
+	
 	public ToolRecipe(ResourceLocation idIn, String groupIn, ItemStack recipeOutputIn,
 			NonNullList<Ingredient> recipeItemsIn) {
 		super(idIn, groupIn, recipeOutputIn, recipeItemsIn);
@@ -53,58 +56,59 @@ public class ToolRecipe extends ShapelessRecipe {
 	/**
 	 * Identical to the ShapelessRecipe serializer.
 	 */
-	public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ToolRecipe> {
-	      public static final String NAME = "crafting_tool";
-	      
-	      public ToolRecipe read(ResourceLocation recipeId, JsonObject json) {
-	    	  System.out.println(json);
-	         String s = JSONUtils.getString(json, "group", "");
-	         NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
-	         if (nonnulllist.isEmpty()) {
-	            throw new JsonParseException("No ingredients for shapeless recipe");
-	         } else if (nonnulllist.size() > ShapedRecipe.MAX_WIDTH * ShapedRecipe.MAX_HEIGHT) {
-	            throw new JsonParseException("Too many ingredients for shapeless recipe the max is " + (ShapedRecipe.MAX_WIDTH * ShapedRecipe.MAX_HEIGHT));
-	         } else {
-	            ItemStack itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
-	            return new ToolRecipe(recipeId, s, itemstack, nonnulllist);
-	         }
-	      }
+	public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>>
+			implements IRecipeSerializer<ToolRecipe> {
+		public static final String NAME = "crafting_tool";
 
-	      private static NonNullList<Ingredient> readIngredients(JsonArray p_199568_0_) {
-	         NonNullList<Ingredient> nonnulllist = NonNullList.create();
+		public ToolRecipe read(ResourceLocation recipeId, JsonObject json) {
+			String s = JSONUtils.getString(json, "group", "");
+			NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
+			if (nonnulllist.isEmpty()) {
+				throw new JsonParseException("No ingredients for shapeless recipe");
+			} else if (nonnulllist.size() > MAX_WIDTH * MAX_HEIGHT) {
+				throw new JsonParseException("Too many ingredients for shapeless recipe the max is "
+						+ (MAX_WIDTH * MAX_HEIGHT));
+			} else {
+				ItemStack itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+				return new ToolRecipe(recipeId, s, itemstack, nonnulllist);
+			}
+		}
 
-	         for(int i = 0; i < p_199568_0_.size(); ++i) {
-	            Ingredient ingredient = Ingredient.deserialize(p_199568_0_.get(i));
-	            if (!ingredient.hasNoMatchingItems()) {
-	               nonnulllist.add(ingredient);
-	            }
-	         }
+		private static NonNullList<Ingredient> readIngredients(JsonArray p_199568_0_) {
+			NonNullList<Ingredient> nonnulllist = NonNullList.create();
 
-	         return nonnulllist;
-	      }
+			for (int i = 0; i < p_199568_0_.size(); ++i) {
+				Ingredient ingredient = Ingredient.deserialize(p_199568_0_.get(i));
+				if (!ingredient.hasNoMatchingItems()) {
+					nonnulllist.add(ingredient);
+				}
+			}
 
-	      public ToolRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-	         String s = buffer.readString(32767);
-	         int i = buffer.readVarInt();
-	         NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
+			return nonnulllist;
+		}
 
-	         for(int j = 0; j < nonnulllist.size(); ++j) {
-	            nonnulllist.set(j, Ingredient.read(buffer));
-	         }
+		public ToolRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+			String s = buffer.readString(32767);
+			int i = buffer.readVarInt();
+			NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
 
-	         ItemStack itemstack = buffer.readItemStack();
-	         return new ToolRecipe(recipeId, s, itemstack, nonnulllist);
-	      }
+			for (int j = 0; j < nonnulllist.size(); ++j) {
+				nonnulllist.set(j, Ingredient.read(buffer));
+			}
 
-	      public void write(PacketBuffer buffer, ToolRecipe recipe) {
-	         buffer.writeString(recipe.group);
-	         buffer.writeVarInt(recipe.recipeItems.size());
+			ItemStack itemstack = buffer.readItemStack();
+			return new ToolRecipe(recipeId, s, itemstack, nonnulllist);
+		}
 
-	         for(Ingredient ingredient : recipe.recipeItems) {
-	            ingredient.write(buffer);
-	         }
+		public void write(PacketBuffer buffer, ToolRecipe recipe) {
+			buffer.writeString(recipe.getGroup());
+			buffer.writeVarInt(recipe.getIngredients().size());
 
-	         buffer.writeItemStack(recipe.recipeOutput);
-	      }
-	   }
+			for (Ingredient ingredient : recipe.getIngredients()) {
+				ingredient.write(buffer);
+			}
+
+			buffer.writeItemStack(recipe.getRecipeOutput());
+		}
+	}
 }
